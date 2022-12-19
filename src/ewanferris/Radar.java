@@ -1,4 +1,4 @@
-package defaultpackage;
+package ewanferris;
 
 public class Radar {
 	private Robot_feewEx1 robot;

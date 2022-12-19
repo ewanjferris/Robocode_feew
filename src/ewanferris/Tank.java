@@ -1,4 +1,4 @@
-package defaultpackage;
+package ewanferris;
 
 import java.util.Random;
 
@@ -30,8 +30,8 @@ public class Tank{
 			robot.setTurnRight(-90);
 			//go forward
 			robot.setAhead(200); 
-		}		      
-		
+		}
+				
 	}
 	
 

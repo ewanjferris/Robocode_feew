@@ -1,4 +1,4 @@
-package defaultpackage;
+package ewanferris;
 
 import robocode.ScannedRobotEvent;
 import robocode.util.Utils;
@@ -30,9 +30,11 @@ public class Canon {
 	 public void fire() {
 		 int turnsAgo = robot.getTurn() - turnSeen;
 		 if (target != null & turnsAgo <= 3) {
+			 //power depends on the range of the target
 			 double power = 3;
-			 if (target.getDistance() > 200) power = 1;
-			 //if (target.getDistance() > 300) power = 1;
+			 if (target.getDistance() > 200) power = 2;
+			 if (target.getDistance() > 300) power = 1;
+			
 			 			 
 			 double gunHeading = Utils.normalRelativeAngle(robot.getGunHeadingRadians());
 			 double gunTurn = targetDirection - gunHeading;
@@ -40,11 +42,12 @@ public class Canon {
 			 System.out.println("Gun turn" + gunTurn);
 			 System.out.println();
 			 robot.setTurnGunRightRadians(gunTurn);
-			 if ( Math.abs(gunTurn) < 0.1 ) { // we will be able to fire
+			 /*if ( Math.abs(gunTurn) < 0.1 ) { // we will be able to fire
 			 if (robot.getGunHeat() <= 0) {
 			 robot.setFire(power);
 			 }
-			}
+			}*/
+			 robot.setFire(power);
 		 }
 		}
 
