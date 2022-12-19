@@ -1,70 +1,62 @@
 package defaultpackage;
 
-import java.util.Random;
+
 
 import robocode.AdvancedRobot;
 import robocode.ScannedRobotEvent;
 import robocode.WinEvent;
 import robocode.util.Utils;
 import robocode.BulletHitEvent;
+import java.awt.Color;
 
 
 public class Robot_feewEx1 extends AdvancedRobot {
+	private Tank tank;
+	private Canon canon;
+	private Radar radar;
+	private int turn;
+	
 	public void run() {
 // Initialization
-		int turn = 0;
+		setColors(Color.black, Color.black, Color.black);
+		turn = 0;
 		//setAdjustGunForRobotTurn(true);
 		//setAdjustRadarForGunTurn(true);
+		
+		tank = new Tank(this); 
+		canon = new Canon(this);
+		radar = new Radar(this);
 		
 		while (true) {
 			// One iteration per turn
 			turn++;
 			System.out.println("Turn " + turn);
+			tank.move();
+			canon.fire();
 						
-			 Random rand = new Random(); //instance of random class
-		      int upperbound = 3;
-		        //generate random values from 0-3
-		      int int_random = rand.nextInt(upperbound);
-		      if (int_random == 0) {
-		    	  ahead(200);
-		      }
-			if (int_random == 1) {
-				back(200);
-			}
-			if (int_random == 2) {
-				// Turn in a circle
-				setTurnRight(90);
-				//go forward
-				ahead(200);  
-			}
-			if (int_random == 3) {
-				// Turn in a circle
-				setTurnRight(-90);
-				//go forward
-				ahead(200); 
-			}		      
-			
-						
-			 /*Random randDeg = new Random(); //instance of random class
-		      int upperbound2 = 180;
-		      int int_randomDeg = randDeg.nextInt(upperbound2);
-		      turnRadarRight(int_randomDeg);*/
 		      
 			// Perform any actions we planned this turn
 			execute();
 
 		}
 	}
-
-	/**
-	 * onScannedRobot: What to do when you see another robot
-	 */
+	
 	public void onScannedRobot(ScannedRobotEvent e) {
-// Try to fire the gun immediately
+		 canon.enemySeen(turn, e);
+		 
+	}
+	
+	/*public void onScannedRobot(ScannedRobotEvent e) {
+		// Try to fire the gun immediately
 		System.out.println("Target ahead - fire!");
 		fire(3);
 		
+	}*/
+	
+	public int getTurn() {
+		return turn;
 	}
+
 	
 	public void onWin(WinEvent e) {
 		// Victory dance
