@@ -30,6 +30,7 @@ public class Robot_feewEx1 extends AdvancedRobot {
 		
 		while (true) {
 			// One iteration per turn
+			/*
 			Random rand = new Random(); //instance of random class
 		    int upperbound = 3;
 		      //generate random values from 0-3
@@ -46,9 +47,10 @@ public class Robot_feewEx1 extends AdvancedRobot {
 			if (int_random == 3) {
 				setColors(Color.black, Color.black, Color.black);
 			}
-			
+			*/
 			turn++;
 			System.out.println("Turn " + turn);
+			tank.stayWithinBounds();
 			tank.move();
 			canon.fire();
 			
@@ -88,14 +90,35 @@ public class Robot_feewEx1 extends AdvancedRobot {
 		turnRight(36000);
 	}
 	
-	/*
-	public void onBulletHit(BulletHitEvent event) {
+	
+	public void onWallHit(BulletHitEvent event) {
 	     out.println("I hit " + event.getName() + "!");
-	     ahead(20);
-	     setTurnLeft(45);
-			//go forward
+	     go(0, 0);
 			
-	   }*/
+	   }
+	private void go(double x, double y) {
+	    /* Calculate the difference bettwen the current position and the target position. */
+	    x = x - getX();
+	    y = y - getY();
+	    
+	    /* Calculate the angle relative to the current heading. */
+	    double goAngle = Utils.normalRelativeAngle(Math.atan2(x, y) - getHeadingRadians());
+		
+	    /*
+	     * Apply a tangent to the turn this is a cheap way of achieving back to front turn angle as tangents period is PI.
+	     * The output is very close to doing it correctly under most inputs. Applying the arctan will reverse the function
+	     * back into a normal value, correcting the value. The arctan is not needed if code size is required, the error from
+	     * tangent evening out over multiple turns.
+	     */
+	    setTurnRightRadians(Math.atan(Math.tan(goAngle)));
+		
+	    /* 
+	     * The cosine call reduces the amount moved more the more perpendicular it is to the desired angle of travel. The
+	     * hypot is a quick way of calculating the distance to move as it calculates the length of the given coordinates
+	     * from 0.
+	     */
+	    setAhead(Math.cos(goAngle) * Math.hypot(x, y));
+	}
 	
 	
 }
