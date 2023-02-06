@@ -5,9 +5,17 @@ import java.util.Random;
 public class Tank{
 	private Robot_feewEx1 robot;
 	
+	boolean skipMoveFunction = false;
+	
 	public Tank(Robot_feewEx1 robot) {
 		this.robot = robot;
 	}
+	
+	public void setSkipMoveFunctionFalse(boolean skipMoveFunction) {
+		this.skipMoveFunction = skipMoveFunction;
+		skipMoveFunction = false;
+	}
+	
 	public void move(){
 		
 		Random rand = new Random(); //instance of random class
@@ -22,13 +30,13 @@ public class Tank{
 		}
 		if (int_random == 2) {
 			// Turn 
-			robot.setTurnRight(90);
+			robot.setTurnRight(66);
 			//go forward
 			robot.setAhead(200);  
 		}
 		if (int_random == 3) {
 			// Turn 
-			robot.setTurnRight(-90);
+			robot.setTurnRight(-66);
 			//go forward
 			robot.setAhead(200); 
 		}
@@ -36,6 +44,9 @@ public class Tank{
 	}
 	
 	public void stayWithinBounds() {
+		
+		//skipMoveFunction = false;
+		
 		robot.getBattleFieldHeight();
 		robot.getBattleFieldWidth();
 		double boundsHeightMin = robot.getBattleFieldHeight() * 0.2;
@@ -46,22 +57,42 @@ public class Tank{
 		double xPos = robot.getX();
 		double yPos = robot.getY();
 		
+		System.out.println("boundsHeightMin:" + boundsHeightMin);
+		System.out.println("boundsHeightMax:" + boundsHeightMax);
+		System.out.println("boundsWidthMin:" + boundsWidthMin);
+		System.out.println("boundsWidthMax:" + boundsWidthMax);
+		//System.out.println(robot.getBattleFieldHeight());
+		//System.out.println(robot.getBattleFieldWidth());
+		System.out.println("xPos: " + xPos);
+		System.out.println("yPos: " + yPos);
 		
-		System.out.println(robot.getBattleFieldHeight());
-		System.out.println(robot.getBattleFieldWidth());
-		System.out.println(xPos);
-		System.out.println(yPos);
+		//the coordinates of the mid point
+		double yMidPoint = robot.getBattleFieldHeight() * 0.5; 
+		double xMidPoint = robot.getBattleFieldWidth() * 0.5; 
 		
+		double currentRotation = robot.getHeading();
+		
+		double Velocity = robot.getVelocity();
+			
 		
 		 if (xPos <= boundsHeightMin || xPos >= boundsHeightMax) {
-			 robot.setTurnRight(180);
-			  robot.setAhead(200);
+			robot.go(xMidPoint, yMidPoint);
+			skipMoveFunction = true;
 		}
 		
 		if (yPos <= boundsWidthMin || yPos >=boundsWidthMax) {
-			robot.setTurnRight(180);
-			robot.setAhead(200);
+			robot.go(xMidPoint, yMidPoint);
+			skipMoveFunction = true;
 			
+		}
+		
+		if (Math.abs(yPos - yMidPoint) < 20 && Math.abs(xPos - xMidPoint) < 20 ) {
+			skipMoveFunction = false;
+			
+		}
+		
+		if (Velocity == 0) {
+			skipMoveFunction = false;
 		}
 		
 		

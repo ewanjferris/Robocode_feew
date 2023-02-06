@@ -7,6 +7,8 @@ import robocode.ScannedRobotEvent;
 import robocode.WinEvent;
 import robocode.util.Utils;
 import robocode.BulletHitEvent;
+import robocode.HitRobotEvent;
+
 import java.awt.Color;
 import java.util.Random;
 
@@ -51,19 +53,17 @@ public class Robot_feewEx1 extends AdvancedRobot {
 			turn++;
 			System.out.println("Turn " + turn);
 			tank.stayWithinBounds();
-			tank.move();
+			if (tank.skipMoveFunction == false) {
+				tank.move();
+			}
+			//tank.skipMoveFunction = true;
 			canon.fire();
-			
-			
-			
-						
+								
 		      
 			// Perform any actions we planned this turn
 			execute();
 					
-		}
-			
-		
+		}	
 
 	}
 
@@ -90,13 +90,17 @@ public class Robot_feewEx1 extends AdvancedRobot {
 		turnRight(36000);
 	}
 	
+	 public void onHitRobot(HitRobotEvent event) {
+		tank.skipMoveFunction = false;
+	   }
+	 
 	
 	public void onWallHit(BulletHitEvent event) {
 	     out.println("I hit " + event.getName() + "!");
 	     go(0, 0);
 			
 	   }
-	private void go(double x, double y) {
+	void go(double x, double y) {
 	    /* Calculate the difference bettwen the current position and the target position. */
 	    x = x - getX();
 	    y = y - getY();
